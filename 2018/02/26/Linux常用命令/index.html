@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="收集一些常用的linux命令 ##   查看当前目录下各个文件或文件夹的大小du -h --max-depth=1 . 查找几天前的文件find . -maxdepth 1 -mtime +365 压缩文件tar -zcvf xxx.tar.gz ./* 解压文件tar -zxvf xxx.tar.gz . 查找包含指定内容的文件find ./*|xargs grep debug 批量杀死进程ps">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux常用命令">
+<meta property="og:url" content="http://liugu.me/2018/02/26/Linux常用命令/index.html">
+<meta property="og:site_name" content="刘固的博客">
+<meta property="og:description" content="收集一些常用的linux命令 ##   查看当前目录下各个文件或文件夹的大小du -h --max-depth=1 . 查找几天前的文件find . -maxdepth 1 -mtime +365 压缩文件tar -zcvf xxx.tar.gz ./* 解压文件tar -zxvf xxx.tar.gz . 查找包含指定内容的文件find ./*|xargs grep debug 批量杀死进程ps">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-12T16:15:13.141Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux常用命令">
+<meta name="twitter:description" content="收集一些常用的linux命令 ##   查看当前目录下各个文件或文件夹的大小du -h --max-depth=1 . 查找几天前的文件find . -maxdepth 1 -mtime +365 压缩文件tar -zcvf xxx.tar.gz ./* 解压文件tar -zxvf xxx.tar.gz . 查找包含指定内容的文件find ./*|xargs grep debug 批量杀死进程ps">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://liugu.me/2018/02/26/Linux常用命令/">
+
+
+
+
+
+  <title>Linux常用命令 | 刘固的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">刘固的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://liugu.me/2018/02/26/Linux常用命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Liugu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="刘固的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux常用命令</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-26T16:42:00+08:00">
+                2018-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>收集一些常用的linux命令</p>
+<p>## </p>
+<ol>
+<li>查看当前目录下各个文件或文件夹的大小<br><code>du -h --max-depth=1 .</code></li>
+<li>查找几天前的文件<br><code>find . -maxdepth 1 -mtime +365</code></li>
+<li>压缩文件<br><code>tar -zcvf xxx.tar.gz ./*</code></li>
+<li>解压文件<br><code>tar -zxvf xxx.tar.gz .</code></li>
+<li>查找包含指定内容的文件<br><code>find ./*|xargs grep debug</code></li>
+<li>批量杀死进程<br><code>ps -ef|grep test|grep -v grep |awk &#39;{print $2}&#39;|xargs kill -s 9</code></li>
+<li>文件切割<br><code>split -l [行数] -d -a [文件后缀位数] [待切割文件] [文件前缀]</code></li>
+<li>文件去重排序<br><code>sort -n data.txt|uniq</code></li>
+<li>递归修改目录用户组<br><code>chown apache:apache www -R</code></li>
+<li>测试并发量<br><code>ab -n 100 -c 10 -l http://www.your_site.com</code><br>执行POST请求<br><code>ab -n 100 -c 10 -p post.txt http://xxx/test.php</code><br>post.txt里面是参数，如data={“name”:”wgc”}，但是要url编码以后的参数`</li>
+</ol>
+<h2 id="目录操作："><a href="#目录操作：" class="headerlink" title="目录操作："></a>目录操作：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">rm -rf mydir   /*删除mydir目录，不需要确认，直接删除*/</span><br><span class="line">mkdir dirname /*创建名为dirname的目录*/</span><br><span class="line"><span class="built_in">cd</span> mydir /*进入mydir目录*/</span><br><span class="line"><span class="built_in">cd</span> -/*返回进入此目录之前所在的目录*/</span><br><span class="line"><span class="built_in">cd</span> .. /*返回上一级目录，中间有空格*/</span><br><span class="line"><span class="built_in">cd</span> ~ /*回当前用户家目录*/</span><br><span class="line">mv tools tool /*把tools目录改名为tool */</span><br><span class="line">ln -s tool bac /*给tool目录创建名为bac的符号链接,最熟悉的应该就是FTP中www链接到public_html目录了*/</span><br><span class="line">cp -a tool /home/vpser/www /*把tool目录，复制到www目录下 */</span><br><span class="line">ls /* 列出当前目录下的内容 */</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rm go.tar        /* 删除go.tar文件 */</span><br><span class="line">find mt.cgi    /* 查找文件名为mt.cgi的文件 */</span><br><span class="line">df -h              /* 查看磁盘剩余空间 */</span><br></pre></td></tr></table></figure>
+
+<h2 id="解压缩："><a href="#解压缩：" class="headerlink" title="解压缩："></a>解压缩：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tar xvf wordpress.tar   /* 解压tar格式的文件 */</span><br><span class="line">tar tvf myfile.tar     /* 查看tar文件中包含的文件 */</span><br><span class="line">tar cf toole.tar tool /* 把tool目录打包为toole.tar文件 */</span><br><span class="line">tar zcf vpser.tar.gz tool /* 把tool目录打包且压缩为vpser.tar.gz文件，因为.tar文件几乎是没有压缩过的，MT的.tar.gz文件解压成.tar文件后差不多是10MB */</span><br><span class="line">tar jcvf  /var/bak/www.tar.bz2 /var/www/    /*创建.tar.bz2文件，压缩率高*/</span><br><span class="line">tar xjf www.tar.bz2 /*解压tar.bz2格式*/</span><br><span class="line">gzip -d ge.tar.gz        /* 解压.tar.gz文件为.tar文件 */</span><br><span class="line">unzip phpbb.zip      /* 解压zip文件，windows下要压缩出一个.tar.gz格式的文件还是有点麻烦的 */</span><br></pre></td></tr></table></figure>
+
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget http://soft.vpser.net/web/nginx/nginx-0.8.0.tar.gz</span><br><span class="line">/*下载远程服务器上的文件到自己的服务器，连上传都省了，服务器不是100M就是1000M的带宽，下载一个2-3兆的MT还不是几十秒的事 */</span><br><span class="line">wget -c http://soft.vpser.net/web/nginx/nginx-0.8.0.tar.gz</span><br><span class="line">/* 继续下载上次未下载完的文件 */</span><br></pre></td></tr></table></figure>
+
+<h2 id="进程管理："><a href="#进程管理：" class="headerlink" title="进程管理："></a>进程管理：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ps -aux   /*ps 进程状态查询命令*/</span><br><span class="line">ps命令输出字段的含义：</span><br><span class="line">[list]</span><br><span class="line">[*]USER，进程所有者的用户名。</span><br><span class="line">[*]PID，进程号，可以唯一标识该进程。</span><br><span class="line">[*]%CPU，进程自最近一次刷新以来所占用的CPU时间和总时间的百分比。</span><br><span class="line">[*]%MEM，进程使用内存的百分比。</span><br><span class="line">[*]VSZ，进程使用的虚拟内存大小，以K为单位。</span><br><span class="line">[*]RSS，进程占用的物理内存的总数量，以K为单位。</span><br><span class="line">[*]TTY，进程相关的终端名。</span><br><span class="line">[*]STAT，进程状态，用(R--运行或准备运行；S--睡眠状态；I--空闲；Z--冻结；D--不间断睡眠；W-进程没有驻留页；T停止或跟踪。)这些字母来表示。</span><br><span class="line">[*]START，进程开始运行时间。</span><br><span class="line">[*]TIME，进程使用的总CPU时间。</span><br><span class="line">[*]COMMAND，被执行的命令行。</span><br><span class="line">[/list]</span><br><span class="line">ps -aux | grep nginx  /*在所有进程中，查找nginx的进程*/</span><br><span class="line">kill 1234    /*1234为进程ID，即ps -aux 中的PID*/</span><br><span class="line">killall nginx /*killall 通过程序的名字，直接杀死所有进程，nginx为进程名*/</span><br></pre></td></tr></table></figure>
+
+<h2 id="资源占用查询："><a href="#资源占用查询：" class="headerlink" title="资源占用查询："></a>资源占用查询：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">df -sh /home/wwwroot/* /* 查看/home/wwwroot/下各个目录的占用大小 */</span><br><span class="line">free -m /* 查看内存核swap使用情况 */</span><br><span class="line">top /* 查看程序的cpu、内存使用情况 */</span><br><span class="line">netstat -ntl /* 查看端口占用情况 */</span><br></pre></td></tr></table></figure>
+
+<h2 id="用户管理："><a href="#用户管理：" class="headerlink" title="用户管理："></a>用户管理：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adduser /*添加用户，如adduser vpser */</span><br><span class="line">deluser /*删除用户，如deluser vpser */</span><br><span class="line">passwd /*修改密码，按提示输入密码，密码不显示*/</span><br></pre></td></tr></table></figure>
+
+<h2 id="Vim操作"><a href="#Vim操作" class="headerlink" title="Vim操作:"></a>Vim操作:</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">移动类的：</span><br><span class="line">h/j/k/l: 左/下/上/右　移一格</span><br><span class="line">w : 向后词移动　（前面加数字移动多少个词）</span><br><span class="line">b : 向前词移动　（前面加数字移动多少个词）</span><br><span class="line">e : 向后移到词末</span><br><span class="line">ge : 向前移到词末</span><br><span class="line">$ &lt;End&gt; : 行末</span><br><span class="line">0 &lt;Home&gt; : 行首</span><br><span class="line">tx : 向右查找本行的x并移到那儿（大写时向左）</span><br><span class="line">33G : 移到文件的第33行</span><br><span class="line">gg : 文件首行</span><br><span class="line">G : 文件尾行</span><br><span class="line">33% : 文件的33%处</span><br><span class="line">H/M/L : 屏幕的首/中/尾行</span><br><span class="line">zt/zz/zb : 当前行移到屏幕的首/中/底部</span><br><span class="line">跳转：</span><br><span class="line">&quot;  : 回到跳转来的地方</span><br><span class="line">CTRL-O : 跳到一个 “较老” 的地方</span><br><span class="line">CTRL-I &lt;Tab&gt; : 则跳到一个 “较新” 的地方</span><br><span class="line">查找：</span><br><span class="line">/ : 向下查找（后加关键字）</span><br><span class="line">? : 向上查找（后加关键字）</span><br><span class="line">n : 下一条符合的记录</span><br><span class="line">编辑：</span><br><span class="line">i : 转换到插入模式</span><br><span class="line">x : 删除当前字符</span><br><span class="line">. : 重复最后一次的修改操作(同PS里ctrl+f执行滤镜)</span><br><span class="line">u : 撤销操作</span><br><span class="line">CTRL-R : 重做</span><br><span class="line">p : 将删除的字符插入到当前位置(put)</span><br><span class="line">退出保存：</span><br><span class="line">:q : 退出</span><br><span class="line">:q! : 不保存退出</span><br><span class="line">ZZ : 保存后退出</span><br><span class="line">:e! : 放弃修改重新编辑</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/10/新的开始/" rel="next" title="新的开始">
+                <i class="fa fa-chevron-left"></i> 新的开始
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/20/linux查看根目录下所有文件夹大小的方法/" rel="prev" title="linux查看根目录下所有文件夹大小的方法">
+                linux查看根目录下所有文件夹大小的方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Liugu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/backend/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录操作："><span class="nav-number">1.</span> <span class="nav-text">目录操作：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作"><span class="nav-number">2.</span> <span class="nav-text">文件操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解压缩："><span class="nav-number">3.</span> <span class="nav-text">解压缩：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载"><span class="nav-number">4.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程管理："><span class="nav-number">5.</span> <span class="nav-text">进程管理：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源占用查询："><span class="nav-number">6.</span> <span class="nav-text">资源占用查询：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户管理："><span class="nav-number">7.</span> <span class="nav-text">用户管理：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vim操作"><span class="nav-number">8.</span> <span class="nav-text">Vim操作:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liugu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="自动依赖注入什么是依赖注入，用大白话将通过类型提示的方式向函数传递参数。 实例 1首先，定义一个类: 12/routes/web.phpclass Bar &amp;#123;&amp;#125;  假如我们在其他地方要使用到 Bar 提供的功能（服务），怎么办，直接传入参数即可： 1234/routes/web.phpRoute::get(&amp;apos;bar&amp;apos;, function(Bar $bar)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel 核心概念讲解">
+<meta property="og:url" content="http://liugu.me/2018/04/02/Laravel 核心概念讲解/index.html">
+<meta property="og:site_name" content="刘固的博客">
+<meta property="og:description" content="自动依赖注入什么是依赖注入，用大白话将通过类型提示的方式向函数传递参数。 实例 1首先，定义一个类: 12/routes/web.phpclass Bar &amp;#123;&amp;#125;  假如我们在其他地方要使用到 Bar 提供的功能（服务），怎么办，直接传入参数即可： 1234/routes/web.phpRoute::get(&amp;apos;bar&amp;apos;, function(Bar $bar)">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-12T16:15:13.148Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Laravel 核心概念讲解">
+<meta name="twitter:description" content="自动依赖注入什么是依赖注入，用大白话将通过类型提示的方式向函数传递参数。 实例 1首先，定义一个类: 12/routes/web.phpclass Bar &amp;#123;&amp;#125;  假如我们在其他地方要使用到 Bar 提供的功能（服务），怎么办，直接传入参数即可： 1234/routes/web.phpRoute::get(&amp;apos;bar&amp;apos;, function(Bar $bar)">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://liugu.me/2018/04/02/Laravel 核心概念讲解/">
+
+
+
+
+
+  <title>Laravel 核心概念讲解 | 刘固的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">刘固的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://liugu.me/2018/04/02/Laravel 核心概念讲解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Liugu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="刘固的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Laravel 核心概念讲解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-02T15:18:00+08:00">
+                2018-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/default/" itemprop="url" rel="index">
+                    <span itemprop="name">default</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="自动依赖注入"><a href="#自动依赖注入" class="headerlink" title="自动依赖注入"></a>自动依赖注入</h2><p>什么是依赖注入，用大白话将通过类型提示的方式向函数传递参数。</p>
+<h3 id="实例-1"><a href="#实例-1" class="headerlink" title="实例 1"></a>实例 1</h3><p>首先，定义一个类:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/routes/web.php</span><br><span class="line">class Bar &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>假如我们在其他地方要使用到 <code>Bar</code> 提供的功能（服务），怎么办，直接传入参数即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/routes/web.php</span><br><span class="line">Route::get(&apos;bar&apos;, function(Bar $bar) &#123;</span><br><span class="line">    dd($bar);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>访问 <code>/bar</code>，显示 <code>$bar</code> 的实例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Bar &#123;#272&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也就是说，我们不需要先对其进行实例！如果学过 PHP 的面向对象，都知道，正常做法是这样:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class Bar &#123;&#125;</span><br><span class="line">$bar = new Bar();</span><br><span class="line">dd($bar);</span><br></pre></td></tr></table></figure>
+
+<h3 id="实例-2"><a href="#实例-2" class="headerlink" title="实例 2"></a>实例 2</h3><p>可以看一个稍微复杂的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class Baz &#123;&#125;</span><br><span class="line">class Bar </span><br><span class="line">&#123;</span><br><span class="line">    public $baz;</span><br><span class="line"></span><br><span class="line">    public function __construct(Baz $baz)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;baz = $baz;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">$baz = new Baz();</span><br><span class="line">$bar = new Bar($baz);</span><br><span class="line">dd($bar);</span><br></pre></td></tr></table></figure>
+
+<p>为了在 <code>Bar</code> 中能够使用 <code>Baz</code> 的功能，我们需要实例化一个 <code>Baz</code>，然后在实例化 <code>Bar</code> 的时候传入 <code>Baz</code> 实例。</p>
+<p>在 Laravel 中，不仅仅可以自动注入 <code>Bar</code>，也可以自动注入 <code>Baz</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/routes/web.php</span><br><span class="line">class Baz &#123;&#125;</span><br><span class="line">class Bar </span><br><span class="line">&#123;</span><br><span class="line">    public $baz;</span><br><span class="line"></span><br><span class="line">    public function __construct(Baz $baz)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;baz = $baz;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Route::get(&apos;bar&apos;, function(Bar $bar) &#123;</span><br><span class="line">       dd($bar-&gt;baz);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>显示结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Baz &#123;#276&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>通过上述两个例子，可以看出，在 Laravel 中，我们要在类或者函数中使用其他类体用的服务，只需要通过类型提示的方式传递参数，而 Laravel 会自动帮我们去寻找响对应的依赖。</p>
+<p>那么，Laravel 是如何完成这项工作的呢？答案就是通过服务容器。</p>
+<h2 id="服务容器"><a href="#服务容器" class="headerlink" title="服务容器"></a>服务容器</h2><h3 id="什么是服务容器"><a href="#什么是服务容器" class="headerlink" title="什么是服务容器"></a>什么是服务容器</h3><p>服务容器，很好理解，就是装着各种服务实例的特殊类。可以通过「去餐馆吃饭」来进行类比：</p>
+<ul>
+<li><p>吃饭 - 使用服务，即调用该服务的地方</p>
+</li>
+<li><p>饭 - 服务</p>
+</li>
+<li><p>盘子 - 装饭的容器，即服务容器</p>
+</li>
+<li><p>服务员 - 服务提供者，负责装饭、上饭</p>
+</li>
+</ul>
+<p>这个过程在 Laravel 中如何实现呢？</p>
+<ul>
+<li>饭</li>
+</ul>
+<p>定义 Rice 类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/app/Rice.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App;</span><br><span class="line"></span><br><span class="line">class Rice</span><br><span class="line">&#123;</span><br><span class="line">    public function food()</span><br><span class="line">    &#123;</span><br><span class="line">        return &apos;香喷喷的白米饭&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>把饭装盘子</li>
+</ul>
+<p>在容器中定义了名为 <code>rice</code> 的变量（你也可以起其他名字，比如 <code>rice_container</code>），绑定了 <code>Food</code> 的实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app()-&gt;bind(&apos;rice&apos;, function ()&#123;</span><br><span class="line">    return new \App\Rice();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>也可以写成:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app()-&gt;bind(&apos;rice&apos;,\App\Rice::class);</span><br></pre></td></tr></table></figure>
+
+<p>现在，吃饭了，通过 <code>make</code> 方法提供吃饭的服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Route::get(&apos;eat&apos;, function() &#123;</span><br><span class="line"></span><br><span class="line">       return app()-&gt;make(&apos;rice&apos;)-&gt;food(); </span><br><span class="line">       // 或者 return resolve(&apos;rice&apos;)-&gt;food()；</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><code>make</code> 方法传入我们刚才定义的变量名即可调用该服务。</p>
+<p>访问 <code>/eat</code>，返回 <code>香喷喷的白米饭</code>。</p>
+<p>为了方便起见，我们在路由文件中直接实现了该过程，相当于自给自足。但是服务通常由服务提供者来管理的。</p>
+<p>因此，我们可以让 <code>AppServiceProvider</code> 这个服务员来管理该服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/app/Providers/AppServiceProvider.php</span><br><span class="line">namespace App\Providers;</span><br><span class="line"></span><br><span class="line">public function register()</span><br><span class="line">&#123;</span><br><span class="line">    $this-&gt;app-&gt;bind(&apos;food_container&apos;,Rice::class);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更为常见的是，我们自己创建一个服务员：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ php artisan make:provider RiceServiceProvider</span><br></pre></td></tr></table></figure>
+
+<p>注册:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/app/Providers/RiceServiceProvider.php</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">use App\Rice;</span><br><span class="line">public function register()</span><br><span class="line">&#123;</span><br><span class="line">    $this-&gt;app-&gt;bind(&apos;rice&apos;,Rice::class);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里定义了 <code>register()</code> 方法，但是还需要调用该方法才能真正绑定服务到容器，因此，需要将其添加到 <code>providers</code> 数组中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/config/app.php</span><br><span class="line">&apos;providers&apos; =&gt; [</span><br><span class="line">   App\Providers\RiceServiceProvider::class,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+<p>这一步有何作用呢？Laravel 在启动的时候会访问该文件，然后调用里面的所有服务提供者的 <code>register()</code> 方法，这样我们的服务就被绑定到容器中了。</p>
+<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><p>通过上述的例子，基本上可以理解服务容器和服务提供者的使用。当然了，我们更为常见的还是使用类型提示来传递参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use App\Rice;</span><br><span class="line"></span><br><span class="line">Route::get(&apos;eat&apos;, function(Rice $rice) &#123;</span><br><span class="line">       return $rice-&gt;food();</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在本例中，使用自动依赖注入即可。不需要在用 <code>bind</code> 来手动绑定以及 <code>make</code> 来调用服务。那么，为什么还需要 <code>bind</code> 和 <code>make</code> 呢？ <code>make</code> 比较好理解，我们有一些场合 Laravel 不能提供自动解析，那么这时候手动使用 <code>make</code> 解析就可以了，而 <code>bind</code> 的学问就稍微大了点，后面将会详细说明。</p>
+<h2 id="门面"><a href="#门面" class="headerlink" title="门面"></a>门面</h2><p>门面是什么，我们回到刚才的「吃饭」的例子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Route::get(&apos;eat&apos;, function(Rice $rice) &#123;</span><br><span class="line">       return $rice-&gt;food();</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在 Laravel，通常还可以这么写:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Route::get(&apos;eat&apos;, function() &#123;</span><br><span class="line">       return Rice::food();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Route::get(&apos;eat&apos;, function() &#123;</span><br><span class="line">       return rice()-&gt;food();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>那么，Laravel 是如何实现的呢？答案是通过门面。</p>
+<h3 id="门面方法实现"><a href="#门面方法实现" class="headerlink" title="门面方法实现"></a>门面方法实现</h3><p>先来实现 <code>Rice::food()</code>，只需要一步：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/app/RiceFacade.php</span><br><span class="line">&lt;?php </span><br><span class="line"></span><br><span class="line">namespace App;</span><br><span class="line">use Illuminate\Support\Facades\Facade;</span><br><span class="line"></span><br><span class="line">class RiceFacade extends Facade</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    protected static function getFacadeAccessor()</span><br><span class="line">    &#123;</span><br><span class="line">        return &apos;rice&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在，<code>RiceFacade</code> 就代理了 <code>Rice</code> 类了，这就是门面的本质了。我们就可以直接使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Route::get(&apos;eat&apos;, function() &#123;</span><br><span class="line"></span><br><span class="line">    dd(\App\RiceFacade::food());</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>因为 <code>\App\RiceFacade</code> 比较冗长，我们可以用 php 提供的 <code>class_alias</code> 方法起个别名吧：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/app/Providers/RiceServiceProvider.php</span><br><span class="line">public function register()</span><br><span class="line">&#123;  </span><br><span class="line">   $this-&gt;app-&gt;bind(&apos;rice&apos;,\App\Rice::class);</span><br><span class="line">   class_alias(\App\RiceFacade::class, &apos;Rice&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样做的话，就实现了一开始的用法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Route::get(&apos;eat&apos;, function() &#123;</span><br><span class="line">       return Rice::food();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>看上去就好像直接调用了 <code>Rice</code> 类，实际上，调用的是 <code>RiceFacade</code> 类来代理，因此，个人觉得<code>Facade</code> 翻译成假象比较合适。</p>
+<p>最后，为了便于给代理类命名，Laravel 提供了统一命名别名的地方：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/config/app.php</span><br><span class="line"></span><br><span class="line">&apos;aliases&apos; =&gt; [</span><br><span class="line"></span><br><span class="line">    &apos;Rice&apos; =&gt; \App\RiceFacade::class,</span><br><span class="line"></span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+<h3 id="门面实现过程分析"><a href="#门面实现过程分析" class="headerlink" title="门面实现过程分析"></a>门面实现过程分析</h3><p>首先：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Rice::food();</span><br></pre></td></tr></table></figure>
+
+<p>因为 <code>Rice</code> 是别名，所以实际上执行的是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\App\RiceFacade::food()</span><br></pre></td></tr></table></figure>
+
+<p>但是我们的 <code>RiceFacade</code> 类里面并没有定义静态方法 <code>food</code> 啊？怎么办呢？直接抛出异常吗？不是，在 PHP 里，如果访问了不可访问的静态方法，会先调用 <code>__callstatic</code>,所以执行的是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\App\RiceFacade::__callStatic()</span><br></pre></td></tr></table></figure>
+
+<p>虽然我们在 <code>RiceFacade</code> 中没有定义，但是它的父类 <code>Facade</code> 已经定义好了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php</span><br><span class="line">public static function __callStatic($method, $args)</span><br><span class="line">&#123;   </span><br><span class="line"></span><br><span class="line">     // 实例化  Rice &#123;#270&#125;</span><br><span class="line">    $instance = static::getFacadeRoot();</span><br><span class="line"></span><br><span class="line">     // 实例化失败，抛出异常</span><br><span class="line">    if (! $instance) &#123;</span><br><span class="line">        throw new RuntimeException(&apos;A facade root has not been set.&apos;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     // 调用该实例的方法</span><br><span class="line">    return $instance-&gt;$method(...$args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>主要工作就是第一步实例化:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static function getFacadeRoot()</span><br><span class="line">&#123;</span><br><span class="line">    return static::resolveFacadeInstance(static::getFacadeAccessor());</span><br><span class="line">    // 本例中：static::resolveFacadeInstance(&apos;rice&apos;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>进一步查看 <code>resolveFacadeInstance()</code> 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">protected static function resolveFacadeInstance($name)</span><br><span class="line">   &#123;   </span><br><span class="line">         // rice 是字符串，因此跳过该步骤</span><br><span class="line">       if (is_object($name)) &#123;</span><br><span class="line">           return $name;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">        // 是否设置了 `rice` 实例</span><br><span class="line">       if (isset(static::$resolvedInstance[$name])) &#123;</span><br><span class="line">           return static::$resolvedInstance[$name];</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       return static::$resolvedInstance[$name] = static::$app[$name];</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一步比较好理解，如果我们之前在 <code>RiceFacade</code> 这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">protected static function getFacadeAccessor()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    return new \App\Rice;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么就直接返回 <code>Rice</code> 实例了，这也是一种实现方式。</p>
+<p>主要难点在于最后这行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">return static::$resolvedInstance[$name] = static::$app[$name];</span><br></pre></td></tr></table></figure>
+
+<p>看上去像是在访问 <code>$app</code>数组，实际上是使用 <a>数组方式来访问对象</a>，PHP 提供了这种访问方式接口，而 Laravel 实现了该接口。</p>
+<p>也就是说，<code>$app</code> 属性其实就是对 Laravel 容器的引用，因此这里实际上就是访问容器上名为 <code>rice</code> 的对象。而我们之前学习容器的时候，已经将 <code>rice</code> 绑定了 <code>Rice</code> 类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public function register()</span><br><span class="line">&#123;  </span><br><span class="line">   $this-&gt;app-&gt;bind(&apos;rice&apos;,\App\Rice::class);</span><br><span class="line">   // class_alias(\App\RiceFacade::class, &apos;Rice&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以，其实就是返回该类的实例了。懂得了服务容器和服务提供者，理解门面也就不难了。</p>
+<h3 id="辅助方法实现"><a href="#辅助方法实现" class="headerlink" title="辅助方法实现"></a>辅助方法实现</h3><p>辅助方法的实现，更简单了。不就是把 <code>app-&gt;make(&#39;rice&#39;)</code> 封装起来嘛：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php</span><br><span class="line">if (! function_exists(&apos;rice&apos;)) &#123;</span><br><span class="line"></span><br><span class="line">    function rice()</span><br><span class="line">    &#123;   </span><br><span class="line">        return app()-&gt;make(&apos;rice&apos;);</span><br><span class="line">        // 等价于 return app(&apos;rice&apos;);</span><br><span class="line">        // 等价于 return app()[&apos;rice&apos;];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们就可以使用了:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Route::get(&apos;eat&apos;, function() &#123;</span><br><span class="line"></span><br><span class="line">    dd(rice()-&gt;food());</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h3><p>Laravel 提供的三种访问类的方式：</p>
+<ul>
+<li><p>依赖注入：通过类型提示的方式实现自动依赖注入</p>
+</li>
+<li><p>门面：通过代理来访问类</p>
+</li>
+<li><p>辅助方法：通过方法的方式来访问类</p>
+</li>
+</ul>
+<p>本质上，这三种方式都是借助于服务容器和服务提供者来实现。那么，服务容器本身有什么好处呢？我们接下来着重介绍下。</p>
+<h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><h3 id="不好的实现"><a href="#不好的实现" class="headerlink" title="不好的实现"></a>不好的实现</h3><p>我们来看另外一个例子（为了方便测试，该例子都写在路由文件中），假设有三种类型的插座：USB、双孔、三孔插座，分别提供插入充电的服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class UsbsocketService</span><br><span class="line">&#123;</span><br><span class="line">    public function insert($deviceName)&#123;</span><br><span class="line">        return $deviceName.&quot; 正在插入 USB 充电&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class DoubleSocketService</span><br><span class="line">&#123;</span><br><span class="line">    public function insert($deviceName)&#123;</span><br><span class="line">        return $deviceName.&quot; 正在插入双孔插座充电&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class ThreeSocketService</span><br><span class="line">&#123;</span><br><span class="line">    public function insert($deviceName)&#123;</span><br><span class="line">        return $deviceName.&quot; 正在插入三孔插座充电&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>设备要使用插座的服务来充电：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Device &#123;</span><br><span class="line"></span><br><span class="line">    protected $socketType; // 插座类型</span><br><span class="line">    public function __construct()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;socketType = new UsbSocketService();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function power($deviceName)</span><br><span class="line">    &#123;    </span><br><span class="line">        return $this-&gt;socketType-&gt;insert($deviceName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在有一台手机要进行充电:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Route::get(&apos;/charge&apos;,function()&#123;</span><br><span class="line"></span><br><span class="line">   $device = new Device();</span><br><span class="line">   return $device-&gt;power(&quot;手机&quot;);</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>因为 Laravel 提供了自动依赖注入功能，因此可以写成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Route::get(&apos;/charge/&#123;device&#125;&apos;,function(Device $device)&#123;</span><br><span class="line"></span><br><span class="line">   return $device-&gt;power(&quot;手机&quot;);</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>访问 <code>/charge/phone</code>，页面显示 <code>phone 正在插入 USB 充电</code>。</p>
+<p>假如，现在有一台电脑要充电，用的是三孔插座，那么我们就需要去修改 <code>Device</code> 类:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$this-&gt;socketType = new ThreeSocketService();</span><br></pre></td></tr></table></figure>
+
+<p>这真是糟糕的设计，设备类对插座服务类产生了依赖。更换设备类型时，经常就要去修改类的内部结构。</p>
+<h3 id="好的实现"><a href="#好的实现" class="headerlink" title="好的实现"></a>好的实现</h3><p>为了解决上面的问题，可以参考「IOC」思路：即将依赖转移到外部。来看看具体怎么做。</p>
+<p>首先定义插座类型接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface SocketType &#123;</span><br><span class="line">    public function insert($deviceName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>让每一种插座都实现该接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class UsbsocketService implements SocketType</span><br><span class="line">&#123;</span><br><span class="line">    public function insert($deviceName)&#123;</span><br><span class="line">        return $deviceName.&quot; 正在插入 USB 充电&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class DoubleSocketService implements SocketType</span><br><span class="line">&#123;</span><br><span class="line">    public function insert($deviceName)&#123;</span><br><span class="line">        return $deviceName.&quot; 正在插入双孔插座充电&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class ThreeSocketService implements SocketType</span><br><span class="line">&#123;</span><br><span class="line">    public function insert($deviceName)&#123;</span><br><span class="line">        return $deviceName.&quot; 正在插入三孔插座充电&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后，设备中传入接口类型而非具体的类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Device &#123;</span><br><span class="line"></span><br><span class="line">    protected $socketType; // 插座类型</span><br><span class="line">    public function __construct(SocketType $socketType) // 传入接口</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;socketType = $socketType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function power($deviceName)</span><br><span class="line">    &#123;    </span><br><span class="line">        return $this-&gt;socketType-&gt;insert($deviceName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实例化的时候再决定使用哪种插座类型，这样依赖就转移到了外部：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Route::get(&apos;/charge&apos;,function()&#123;</span><br><span class="line"></span><br><span class="line">   $socketType = new ThreeSocketService();</span><br><span class="line">   $device = new Device($socketType);</span><br><span class="line">   echo $device-&gt;power(&quot;电脑&quot;);    </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>我们现在可以再不修改类结构的情况下，方便的更换插座来满足不同设备的充电需求:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Route::get(&apos;/charge&apos;,function()&#123;</span><br><span class="line"></span><br><span class="line">   $socketType = new DoubleSocketService();</span><br><span class="line">   $device = new Device($socketType);</span><br><span class="line">   echo $device-&gt;power(&quot;台灯&quot;);    </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="自动依赖注入的失效"><a href="#自动依赖注入的失效" class="headerlink" title="自动依赖注入的失效"></a>自动依赖注入的失效</h3><p>上面举的例子，我们通过 Laravel 的自动依赖注入可以进一步简化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Route::get(&apos;/charge&apos;,function(Device $device)&#123; </span><br><span class="line">       echo $device-&gt;power(&quot;电脑&quot;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这里的类型提示有两个，一个是 <code>Device $device</code>，一个是 Device 类内部构造函数传入的 <code>SocketType $sockType</code>。第一个没有问题，之前也试过。但是第二个 <code>SocketType</code> 是接口，而 Laravel 会将其当成类试图去匹配 <code>SocketType</code> 的类并将其实例化，因此访问 <code>/charge</code> 时候就会报错:</p>
+<blockquote>
+<p>Target [SocketType] is not instantiable while building [Device].</p>
+</blockquote>
+<p>错误原因很明显，Laravel 没法自动绑定接口。因此，我们就需要之前的 <code>bind</code> 方法来手动绑定接口啦：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">app()-&gt;bind(&apos;SocketType&apos;,ThreeSocketService::class);</span><br><span class="line">Route::get(&apos;/charge&apos;,function(Device $device)&#123;</span><br><span class="line"></span><br><span class="line">       echo $device-&gt;power(&quot;电脑&quot;);</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>现在，如果要更换设备，我们只需要改变绑定的值就可以了:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">app()-&gt;bind(&apos;SocketType&apos;,DoubleSocketService::class);</span><br><span class="line">Route::get(&apos;/charge&apos;,function(Device $device)&#123;</span><br><span class="line"></span><br><span class="line">       echo $device-&gt;power(&quot;台灯&quot;);</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>也就是说，我们将依赖转移到了外部之后，进一步由第三方容器来管理，这就是 IOC。</p>
+<h2 id="契约"><a href="#契约" class="headerlink" title="契约"></a>契约</h2><p>契约，不是什么新奇的概念。其实就是上一个例子中，我们定义的接口:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface SocketType &#123;</span><br><span class="line">    public function insert($deviceName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过契约，我们就可以保持松耦合了:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public function __construct(SocketType $socketType) // 传入接口而非具体的插座类型</span><br><span class="line">&#123;</span><br><span class="line">    $this-&gt;socketType = $socketType;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后服务容器再根据需要去绑定哪种服务即可:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app()-&gt;bind(&apos;SocketType&apos;,UsbSocketService::class);</span><br><span class="line">app()-&gt;bind(&apos;SocketType&apos;,DoubleSocketService::class);</span><br><span class="line">app()-&gt;bind(&apos;SocketType&apos;,ThreeSocketService::class);</span><br></pre></td></tr></table></figure>
+
+<hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/21/如何允许PowerShell执行任意自定义脚本？/" rel="next" title="如何允许PowerShell执行任意自定义脚本？">
+                <i class="fa fa-chevron-left"></i> 如何允许PowerShell执行任意自定义脚本？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/03/Scrapy 命令行工具/" rel="prev" title="Scrapy 命令行工具">
+                Scrapy 命令行工具 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Liugu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/backend/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#自动依赖注入"><span class="nav-number">1.</span> <span class="nav-text">自动依赖注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实例-1"><span class="nav-number">1.1.</span> <span class="nav-text">实例 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例-2"><span class="nav-number">1.2.</span> <span class="nav-text">实例 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">1.3.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务容器"><span class="nav-number">2.</span> <span class="nav-text">服务容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是服务容器"><span class="nav-number">2.1.</span> <span class="nav-text">什么是服务容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结-1"><span class="nav-number">2.2.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#门面"><span class="nav-number">3.</span> <span class="nav-text">门面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#门面方法实现"><span class="nav-number">3.1.</span> <span class="nav-text">门面方法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#门面实现过程分析"><span class="nav-number">3.2.</span> <span class="nav-text">门面实现过程分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#辅助方法实现"><span class="nav-number">3.3.</span> <span class="nav-text">辅助方法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结-2"><span class="nav-number">3.4.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IOC"><span class="nav-number">4.</span> <span class="nav-text">IOC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不好的实现"><span class="nav-number">4.1.</span> <span class="nav-text">不好的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#好的实现"><span class="nav-number">4.2.</span> <span class="nav-text">好的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动依赖注入的失效"><span class="nav-number">4.3.</span> <span class="nav-text">自动依赖注入的失效</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#契约"><span class="nav-number">5.</span> <span class="nav-text">契约</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liugu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
